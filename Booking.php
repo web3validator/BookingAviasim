@@ -491,7 +491,7 @@ class Booking
 
 
         if ($is_fixed_date) {
-            $available_dates = self::available_dates();
+            $available_dates = self::available_dates($type);
 
             $date = array_search_r(
                 sanitize_text_field($request['date']),
@@ -508,9 +508,7 @@ class Booking
             if ($date) {
                 $end = ($duration * 60) + $date;
 
-                $type = get_field('simulator_type');
-
-                if ($type === 'boeing') {
+                if ($type === 'Boeing') {
 
                     $existing = Order::where_and(
                         ['date', 'BETWEEN', [$date, $end - 1]],
@@ -539,9 +537,9 @@ class Booking
                     );
                 }
 
-                // if ($existing) {
-                //     $errors[] = __('Цей діапазон часу недоступний');
-                // }
+                if ($existing) {
+                    $errors[] = __('Цей діапазон часу недоступний');
+                }
             }
         }
 
@@ -688,14 +686,13 @@ class Booking
         }
     }
 
-    public static function available_dates(): array
+    public static function available_dates($type = null): array
     {
         $time = current_time('timestamp');
 
         $today             = date('Ymd', $time);
         $today_ts          = strtotime($today);
-        $type = get_field('simulator_type');
-        if ($type === 'boeing') {
+        if ($type === 'Boeing') {
             $working_hours     = get_field('order_dates', 'option');
             $calendar_duration = get_field('order_calendar_duration', 'option') ?? 2;
             $calendar_duration = intval($calendar_duration) * 7;
@@ -725,7 +722,6 @@ class Booking
             });
         }, $calendar_data);
 
-        $type = get_field('simulator_type');
         $current_url = $_SERVER['REQUEST_URI'];
         if ($type === 'F18' || strpos($current_url, '/order-2') !== false || strpos($current_url, '/f18') !== false) {
             $orders = Order::where_and(
