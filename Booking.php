@@ -563,10 +563,9 @@ class Booking
             return new \WP_REST_Response($errors, 400);
         }
 
-        // зачем это?
-        // if ($has_gift) {
-        //     $date = get_post_meta($existingPostID, 'booking_date', true); // Получаем значение booking_date
-        // }
+//        if ($has_gift) {
+//            $date = get_post_meta($existingPostID, 'booking_date', true); // Получаем значение booking_date
+//        }
 
         $order = new Order([
             'name'             => sanitize_text_field($request['name']),
