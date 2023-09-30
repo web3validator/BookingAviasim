@@ -562,6 +562,7 @@ class Booking
         if ( ! empty($errors)) {
             return new \WP_REST_Response($errors, 400);
         }
+
         // зачем это?
         // if ($has_gift) {
         //     $date = get_post_meta($existingPostID, 'booking_date', true); // Получаем значение booking_date
